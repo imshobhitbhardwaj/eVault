@@ -1,0 +1,273 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #0a0f1c;
+  color: #e5e7eb;
+}
+
+/* ======================
+   INDEX / AUTH BOX
+====================== */
+.box {
+  width: 360px;
+  margin: 120px auto;
+  background: #0f172a;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+}
+
+.box h1,
+.box h2 {
+  color: #93c5fd;
+  margin-bottom: 20px;
+}
+
+.box input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.box button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#loginBtn {
+  background: #3b82f6;
+  color: white;
+}
+
+#registerBtn {
+  background: #f59e0b;
+  color: white;
+}
+
+#authBtn {
+  background: #22c55e;
+  color: white;
+}
+
+/* ======================
+   NAVBAR
+====================== */
+.navbar {
+  height: 60px;
+  background: #0a0f1c;
+  border-bottom: 1px solid #1f2937;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 25px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #93c5fd;
+  user-select: none;
+}
+
+/* ======================
+   PROFILE DROPDOWN
+====================== */
+.profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.profile::after {
+  content: "";
+  position: absolute;
+  top: 38px;
+  left: 0;
+  right: 0;
+  height: 32px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 55px;
+  right: -10px;
+
+  width: 210px;
+  background: #111827;
+  border: 1px solid #2a3447;
+  border-radius: 12px;
+
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: 0.18s ease;
+}
+
+.profile:hover .dropdown,
+.dropdown:hover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 21px;
+
+  width: 14px;
+  height: 14px;
+  background: #111827;
+
+  transform: rotate(45deg);
+
+  border-left: 1px solid #2a3447;
+  border-top: 1px solid #2a3447;
+}
+
+.email {
+  text-align: center;
+  font-size: 15px;
+  color: #22c55e;
+}
+
+#logoutBtn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 7px;
+  border-radius: 6px;
+}
+
+/* ======================
+   DASHBOARD CENTER
+====================== */
+.center {
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ======================
+   DASHBOARD CARD (FIXED SPACING)
+====================== */
+.card {
+  width: 420px;
+  background: #0f172a;
+  border: 1px solid #1f2937;
+
+  padding: 32px;         /* 🔥 more breathing space */
+  border-radius: 12px;
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;            /* 🔥 MAIN FIX: spacing between all items */
+}
+
+.card h2 {
+  margin-bottom: 5px;
+  color: #93c5fd;
+}
+
+.card h3 {
+  margin-top: 8px;
+  margin-bottom: 5px;
+  color: #fbbf24;
+}
+
+/* ======================
+   INPUT
+====================== */
+input[type="file"] {
+  margin-top: 10px;
+  padding: 8px;
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #cbd5e1;
+}
+
+/* ======================
+   BUTTONS
+====================== */
+button {
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+#uploadBtn {
+  background: #22c55e;
+  color: white;
+}
+
+#loadBtn {
+  background: #f59e0b;
+  color: white;
+}
+
+/* ======================
+   FILE LIST (FIXED SPACING)
+====================== */
+#list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;     /* 🔥 spacing between file rows */
+  margin-top: 10px;
+}
+
+#list div {
+  background: #1e293b;
+  padding: 12px;
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

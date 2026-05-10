@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>eVault Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">eVault</div>
+
+  <div class="profile">
+
+    <div class="avatar">👤</div>
+
+    <div class="dropdown">
+      <div class="email" id="userEmail"></div>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="center">
+
+  <div class="card">
+
+    <h2>Secure File Vault</h2>
+
+    <input type="file" id="file">
+    <button id="uploadBtn">Upload</button>
+
+    <div class="divider"></div>
+
+    <h3>Your Files</h3>
+
+    <button id="loadBtn">Load Files</button>
+
+    <div id="list"></div>
+
+  </div>
+
+</div>
+
+<script src="/app.js"></script>
+
+</body>
+</html>
