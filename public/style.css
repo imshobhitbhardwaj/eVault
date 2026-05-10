@@ -10,9 +10,6 @@ body {
   color: #e5e7eb;
 }
 
-/* ======================
-   INDEX / AUTH BOX
-====================== */
 .box {
   width: 360px;
   margin: 120px auto;
@@ -64,9 +61,6 @@ body {
   color: white;
 }
 
-/* ======================
-   NAVBAR
-====================== */
 .navbar {
   height: 60px;
   background: #0a0f1c;
@@ -86,9 +80,6 @@ body {
   user-select: none;
 }
 
-/* ======================
-   PROFILE DROPDOWN
-====================== */
 .profile {
   position: relative;
   display: flex;
@@ -134,7 +125,7 @@ body {
   flex-direction: column;
   gap: 10px;
 
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 
   opacity: 0;
   visibility: hidden;
@@ -180,9 +171,6 @@ body {
   border-radius: 6px;
 }
 
-/* ======================
-   DASHBOARD CENTER
-====================== */
 .center {
   height: calc(100vh - 60px);
   display: flex;
@@ -190,22 +178,19 @@ body {
   align-items: center;
 }
 
-/* ======================
-   DASHBOARD CARD (FIXED SPACING)
-====================== */
 .card {
   width: 420px;
   background: #0f172a;
   border: 1px solid #1f2937;
 
-  padding: 32px;         /* 🔥 more breathing space */
+  padding: 32px;
   border-radius: 12px;
 
   text-align: center;
 
   display: flex;
   flex-direction: column;
-  gap: 14px;            /* 🔥 MAIN FIX: spacing between all items */
+  gap: 14px;
 }
 
 .card h2 {
@@ -219,9 +204,6 @@ body {
   color: #fbbf24;
 }
 
-/* ======================
-   INPUT
-====================== */
 input[type="file"] {
   margin-top: 10px;
   padding: 8px;
@@ -231,9 +213,6 @@ input[type="file"] {
   color: #cbd5e1;
 }
 
-/* ======================
-   BUTTONS
-====================== */
 button {
   cursor: pointer;
   font-weight: 600;
@@ -252,13 +231,10 @@ button {
   color: white;
 }
 
-/* ======================
-   FILE LIST (FIXED SPACING)
-====================== */
 #list {
   display: flex;
   flex-direction: column;
-  gap: 10px;     /* 🔥 spacing between file rows */
+  gap: 10px;
   margin-top: 10px;
 }
 

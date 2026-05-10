@@ -12,7 +12,6 @@ const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
 
-/* UPLOAD */
 router.post("/upload", auth, upload.single("file"), async (req, res) => {
   const buffer = fs.readFileSync(req.file.path);
 
@@ -43,13 +42,11 @@ router.post("/upload", auth, upload.single("file"), async (req, res) => {
   res.json({ message: "Uploaded successfully" });
 });
 
-/* GET FILES */
 router.get("/files", auth, async (req, res) => {
   const files = await File.find({ uploadedBy: req.user.id });
   res.json(files);
 });
 
-/* DOWNLOAD */
 router.get("/download/:id", auth, async (req, res) => {
   const file = await File.findById(req.params.id);
 

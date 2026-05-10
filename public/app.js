@@ -7,9 +7,6 @@ const isLoginPage = path.includes("/login");
 const isRegisterPage = path.includes("/register");
 const isDashboardPage = path.includes("/dashboard");
 
-/* =========================
-   INDEX PAGE FIX (LOGIN / REGISTER BUTTONS)
-========================= */
 if (isIndexPage) {
 
   window.addEventListener("DOMContentLoaded", () => {
@@ -32,16 +29,10 @@ if (isIndexPage) {
   });
 }
 
-/* =========================
-   AUTH GUARD
-========================= */
 if (isDashboardPage && !token) {
   window.location.href = "/login";
 }
 
-/* =========================
-   AUTH PAGE (LOGIN / REGISTER)
-========================= */
 if (isLoginPage || isRegisterPage) {
 
   window.addEventListener("DOMContentLoaded", () => {
@@ -109,9 +100,6 @@ if (isLoginPage || isRegisterPage) {
   });
 }
 
-/* =========================
-   DASHBOARD PAGE
-========================= */
 if (isDashboardPage) {
 
   window.addEventListener("DOMContentLoaded", () => {
@@ -197,7 +185,6 @@ if (isDashboardPage) {
       };
     }
 
-    /* CLICK HANDLER FOR DOWNLOAD */
     document.addEventListener("click", (e) => {
       if (e.target.classList.contains("downloadBtn")) {
         downloadFile(e.target.dataset.id);
@@ -207,9 +194,6 @@ if (isDashboardPage) {
   });
 }
 
-/* =========================
-   LOAD USER
-========================= */
 async function loadUser() {
 
   try {
@@ -228,9 +212,6 @@ async function loadUser() {
   }
 }
 
-/* =========================
-   DOWNLOAD FILE
-========================= */
 async function downloadFile(id) {
 
   try {

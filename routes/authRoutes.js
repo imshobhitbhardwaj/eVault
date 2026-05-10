@@ -6,7 +6,6 @@ const auth = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-/* REGISTER (AUTO LOGIN) */
 router.post("/register", async (req, res) => {
 
   const { email, password } = req.body;
@@ -25,7 +24,6 @@ router.post("/register", async (req, res) => {
 
   const user = await User.create({ email, password: hash });
 
-  // 🔥 AUTO LOGIN TOKEN
   const token = jwt.sign(
     { id: user._id },
     process.env.JWT_SECRET,
@@ -35,7 +33,6 @@ router.post("/register", async (req, res) => {
   res.json({ token, message: "Registered & logged in" });
 });
 
-/* LOGIN */
 router.post("/login", async (req, res) => {
 
   const { email, password } = req.body;
@@ -61,7 +58,6 @@ router.post("/login", async (req, res) => {
   res.json({ token });
 });
 
-/* GET LOGGED USER */
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user.id).select("-password");
   res.json(user);

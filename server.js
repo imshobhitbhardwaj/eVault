@@ -13,19 +13,10 @@ const fileRoutes = require("./routes/fileRoutes");
 
 const app = express();
 
-/* =========================
-   FIX: TRUST PROXY (IMPORTANT)
-========================= */
 app.set("trust proxy", 1);
 
-/* =========================
-   DB
-========================= */
 connectDB();
 
-/* =========================
-   MIDDLEWARE
-========================= */
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
@@ -37,15 +28,8 @@ app.use(rateLimit({
   legacyHeaders: false
 }));
 
-/* =========================
-   STATIC FILES
-========================= */
 app.use(express.static(path.join(__dirname, "public")));
 
-/* =========================
-   PAGE ROUTES (IMPORTANT FIX)
-   This fixes: Cannot GET /login
-========================= */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -62,15 +46,9 @@ app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
-/* =========================
-   API ROUTES
-========================= */
 app.use("/api/auth", authRoutes);
 app.use("/api/files", fileRoutes);
 
-/* =========================
-   START SERVER
-========================= */
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
