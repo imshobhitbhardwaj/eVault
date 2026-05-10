@@ -1,161 +1,257 @@
+const token = localStorage.getItem("token");
 
-let token = localStorage.getItem("token");
+const path = window.location.pathname;
 
-/* ======================
-   INDEX (FIXED 100%)
-====================== */
-function isIndex() {
-  return (
-    location.pathname.endsWith("index.html") ||
-    location.pathname === "/" ||
-    location.pathname === ""
-  );
-}
+const isIndexPage = path === "/" || path.includes("index");
+const isLoginPage = path.includes("/login");
+const isRegisterPage = path.includes("/register");
+const isDashboardPage = path.includes("/dashboard");
 
-if (isIndex()) {
+/* =========================
+   INDEX PAGE FIX (LOGIN / REGISTER BUTTONS)
+========================= */
+if (isIndexPage) {
 
   window.addEventListener("DOMContentLoaded", () => {
 
     const loginBtn = document.getElementById("loginBtn");
     const registerBtn = document.getElementById("registerBtn");
 
-    if (!loginBtn || !registerBtn) {
-      console.error("Index buttons not found");
-      return;
+    if (loginBtn) {
+      loginBtn.onclick = () => {
+        window.location.href = "/login";
+      };
     }
 
-    loginBtn.addEventListener("click", () => {
-      location.href = "auth.html?mode=login";
-    });
-
-    registerBtn.addEventListener("click", () => {
-      location.href = "auth.html?mode=register";
-    });
+    if (registerBtn) {
+      registerBtn.onclick = () => {
+        window.location.href = "/register";
+      };
+    }
 
   });
 }
 
-/* ======================
-   AUTH
-====================== */
-if (location.pathname.includes("auth.html")) {
+/* =========================
+   AUTH GUARD
+========================= */
+if (isDashboardPage && !token) {
+  window.location.href = "/login";
+}
 
-  const params = new URLSearchParams(location.search);
-  let mode = params.get("mode") || "login";
+/* =========================
+   AUTH PAGE (LOGIN / REGISTER)
+========================= */
+if (isLoginPage || isRegisterPage) {
 
   window.addEventListener("DOMContentLoaded", () => {
 
+    const mode = isRegisterPage ? "register" : "login";
+
     const title = document.getElementById("title");
-    const btn = document.getElementById("authBtn");
+    const authBtn = document.getElementById("authBtn");
     const switchText = document.getElementById("switchText");
 
-    function render() {
-      if (mode === "login") {
-        title.innerText = "Login";
-        btn.innerText = "Login";
-        switchText.innerHTML = `No account? <a href="?mode=register">Register</a>`;
-      } else {
-        title.innerText = "Register";
-        btn.innerText = "Register";
-        switchText.innerHTML = `Already have account? <a href="?mode=login">Login</a>`;
+    if (!title || !authBtn) return;
+
+    if (mode === "login") {
+      title.innerText = "Login";
+      authBtn.innerText = "Login";
+      if (switchText) {
+        switchText.innerHTML = `No account? <a href="/register">Register</a>`;
+      }
+    } else {
+      title.innerText = "Register";
+      authBtn.innerText = "Register";
+      if (switchText) {
+        switchText.innerHTML = `Already have account? <a href="/login">Login</a>`;
       }
     }
 
-    render();
+    authBtn.onclick = async () => {
 
-    btn.onclick = async () => {
+      const email = document.getElementById("email")?.value?.trim();
+      const password = document.getElementById("password")?.value?.trim();
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      if (!email || !password) {
+        return alert("Please fill all fields");
+      }
 
-      const url = mode === "login"
+      const endpoint = mode === "login"
         ? "/api/auth/login"
         : "/api/auth/register";
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+      try {
 
-      const data = await res.json();
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
 
-      if (!data.token) {
-        alert(data.message || "Error");
-        return;
+        const data = await res.json();
+
+        if (!res.ok) {
+          return alert(data.message || "Error");
+        }
+
+        localStorage.setItem("token", data.token);
+
+        window.location.href = "/dashboard";
+
+      } catch (err) {
+        console.error(err);
+        alert("Network error");
       }
 
-      localStorage.setItem("token", data.token);
-      location.href = "dashboard.html";
     };
+
   });
 }
 
-/* ======================
-   DASHBOARD
-====================== */
-if (location.pathname.includes("dashboard.html")) {
+/* =========================
+   DASHBOARD PAGE
+========================= */
+if (isDashboardPage) {
 
-  if (!token) location.href = "auth.html?mode=login";
+  window.addEventListener("DOMContentLoaded", () => {
 
-  async function loadUser() {
+    loadUser();
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const loadBtn = document.getElementById("loadBtn");
+
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      };
+    }
+
+    if (uploadBtn) {
+      uploadBtn.onclick = async () => {
+
+        const file = document.getElementById("file")?.files?.[0];
+
+        if (!file) {
+          return alert("Select file");
+        }
+
+        const form = new FormData();
+        form.append("file", file);
+
+        try {
+
+          const res = await fetch("/api/files/upload", {
+            method: "POST",
+            headers: { Authorization: token },
+            body: form
+          });
+
+          const data = await res.json();
+          alert(data.message);
+
+        } catch (err) {
+          console.error(err);
+          alert("Upload failed");
+        }
+
+      };
+    }
+
+    if (loadBtn) {
+      loadBtn.onclick = async () => {
+
+        try {
+
+          const res = await fetch("/api/files/files", {
+            headers: { Authorization: token }
+          });
+
+          const data = await res.json();
+
+          const list = document.getElementById("list");
+
+          if (!list) return;
+
+          if (!data.length) {
+            list.innerHTML = `<p style="color:#94a3b8;">No files uploaded yet</p>`;
+            return;
+          }
+
+          list.innerHTML = data.map(file => `
+            <div class="fileItem">
+              <span>${file.originalName}</span>
+              <button class="downloadBtn" data-id="${file._id}">
+                Download
+              </button>
+            </div>
+          `).join("");
+
+        } catch (err) {
+          console.error(err);
+          alert("Failed to load files");
+        }
+
+      };
+    }
+
+    /* CLICK HANDLER FOR DOWNLOAD */
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("downloadBtn")) {
+        downloadFile(e.target.dataset.id);
+      }
+    });
+
+  });
+}
+
+/* =========================
+   LOAD USER
+========================= */
+async function loadUser() {
+
+  try {
+
     const res = await fetch("/api/auth/me", {
       headers: { Authorization: token }
     });
 
     const user = await res.json();
-    document.getElementById("userEmail").innerText = user.email;
+
+    const el = document.getElementById("userEmail");
+    if (el) el.innerText = user.email;
+
+  } catch (err) {
+    console.error(err);
   }
+}
 
-  loadUser();
+/* =========================
+   DOWNLOAD FILE
+========================= */
+async function downloadFile(id) {
 
-  document.getElementById("logoutBtn").onclick = () => {
-    localStorage.removeItem("token");
-    location.href = "auth.html?mode=login";
-  };
+  try {
 
-  document.getElementById("uploadBtn").onclick = async () => {
-
-    const file = document.getElementById("file").files[0];
-    if (!file) return alert("Select file");
-
-    const form = new FormData();
-    form.append("file", file);
-
-    const res = await fetch("/api/files/upload", {
-      method: "POST",
-      headers: { Authorization: token },
-      body: form
-    });
-
-    const data = await res.json();
-    alert(data.message);
-  };
-
-  document.getElementById("loadBtn").onclick = async () => {
-
-    const res = await fetch("/api/files/files", {
+    const res = await fetch(`/api/files/download/${id}`, {
       headers: { Authorization: token }
     });
 
-    const data = await res.json();
+    const blob = await res.blob();
 
-    const list = document.getElementById("list");
+    const url = window.URL.createObjectURL(blob);
 
-    if (!data.length) {
-      list.innerHTML = `<p style="color:#94a3b8;">No files uploaded yet</p>`;
-      return;
-    }
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "file";
 
-    list.innerHTML = data.map(f =>
-      `<div>
-        ${f.originalName}
-        <button onclick="downloadFile('${f._id}')">Download</button>
-      </div>`
-    ).join("");
-  };
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 
-  window.downloadFile = (id) => {
-    location.href = `/api/files/download/${id}`;
-  };
+  } catch (err) {
+    console.error("Download failed", err);
+  }
 }
