@@ -1,20 +1,22 @@
 # 🔐 eVault – Secure Cloud File Vault
 
-eVault is a full-stack secure cloud file storage web application built using **Node.js, Express, MongoDB, and vanilla frontend (HTML, CSS, JavaScript)**.
+eVault is a **secure full-stack cloud file storage system** built using **Node.js, Express, MongoDB, and vanilla frontend (HTML, CSS, JavaScript)**.
 
-It allows users to securely register, login, upload files, and download them from a protected dashboard.
+It supports **user authentication, encrypted file storage, and secure file download system** with a modular backend architecture.
 
 ---
 
 ## 🚀 Features
 
-- 🔑 User Registration & Login system
-- 🛡️ JWT Authentication
-- ☁️ Secure file upload system
-- 📂 File listing dashboard
-- ⬇️ File download support (mobile + desktop)
-- 🌐 Works over local network (mobile access supported)
-- 📱 Responsive UI design
+- 🔑 User Registration & Login (JWT Authentication)
+- 🛡️ Secure Auth Middleware Protection
+- ☁️ File Upload System with Encryption Support
+- 🔐 Chunk-based File Encryption & Decryption
+- 📂 File Management Dashboard
+- ⬇️ Secure File Download System (Mobile + Desktop)
+- 🌐 Works on Local Network (Mobile Access Supported)
+- ⚡ Rate Limiting & Security Headers
+- 📱 Responsive Vanilla Frontend UI
 
 ---
 
@@ -23,10 +25,17 @@ It allows users to securely register, login, upload files, and download them fro
 ### Backend
 - Node.js
 - Express.js
-- MongoDB
-- JWT (Authentication)
-- Multer (File Upload)
-- Helmet & CORS
+- MongoDB (Mongoose)
+- JWT Authentication
+- Multer (File Upload Handling)
+- Helmet (Security Headers)
+- Express Rate Limit
+
+### Security / Utils Layer
+- AES-style File Encryption (Chunk-based)
+- File Hashing System
+- Secure Decryption Logic
+- Custom Utility Functions
 
 ### Frontend
 - HTML5
@@ -43,14 +52,25 @@ eVault/
 ├── server.js
 ├── config/
 │   └── db.js
+│
+├── middleware/
+│   └── authMiddleware.js
+│
 ├── models/
 │   ├── User.js
 │   └── File.js
+│
 ├── routes/
 │   ├── authRoutes.js
 │   └── fileRoutes.js
 │
+├── utils/
+│   ├── encryptChunk.js
+│   ├── decryptChunk.js
+│   └── hashFile.js
+│
 ├── uploads/
+│   └── (encrypted stored files)
 │
 └── public/
     ├── index.html
@@ -86,10 +106,10 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-PORT=5000 #unuse port
+PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key #32 characters
-ENCRYPTION_KEY=your_encrypted_key #32 characters
+JWT_SECRET=your_secret_key
+ENCRYPTION_KEY=your_encrypt_key
 ```
 
 ---
@@ -112,21 +132,21 @@ http://localhost:5000
 ### Mobile (Same WiFi Network)
 ```
 http://YOUR_LOCAL_IP:5000
-Example: http://192.168.29.211:5000
+Example: http://192.168.29.101:5000
 ```
 
 ---
 
 ## 📡 API Endpoints
 
-### Authentication Routes
+### Authentication
 ```
 POST /api/auth/register
 POST /api/auth/login
 GET  /api/auth/me
 ```
 
-### File Routes
+### File System
 ```
 POST /api/files/upload
 GET  /api/files/files
@@ -137,11 +157,23 @@ GET  /api/files/download/:id
 
 ## 🔐 Security Features
 
-- JWT-based authentication
-- Protected API routes
-- Rate limiting
-- Secure file handling
-- Helmet security headers
+- JWT Authentication Middleware
+- Protected API Routes
+- Rate Limiting (Anti-abuse protection)
+- Helmet Security Headers
+- Encrypted File Storage (Chunk-based)
+- File Hash Validation
+- Secure Download Handling
+
+---
+
+## 🛠️ Architecture Improvements
+
+- Modular Route System
+- Middleware-based Authentication
+- Utility Layer for Encryption & Hashing
+- Clean MVC-inspired structure
+- Scalable backend design
 
 ---
 
@@ -151,17 +183,20 @@ GET  /api/files/download/:id
 - ✔ Large file download optimized
 - ✔ Login/Register routing fixed
 - ✔ Network access enabled (0.0.0.0 support)
-- ✔ UI improved with spacing and layout fixes
+- ✔ UI spacing & layout improved
+- ✔ Rate limit proxy issue handled
+- ✔ Secure file handling improved
 
 ---
 
 ## 🚀 Future Improvements
 
-- File encryption before upload
-- Cloud storage integration (AWS / Firebase)
+- File encryption upgrade (AES-256 standard)
+- Cloud storage integration (AWS S3 / Firebase)
 - Download progress bar
-- User roles (Admin / User)
+- Role-based access control (Admin/User)
 - PWA mobile app support
+- File versioning system
 
 ---
 
